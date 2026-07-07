@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omega Group — строительство и ремонт под ключ в Москве</title>
+    <style>
+        :root {
+            /* Новая премиальная палитра */
+            --primary: #C6A96C; /* Мягкое золото */
+            --primary-dark: #A88D54; /* Тёмное золото */
+            --gold: #C6A96C;
+            --text: #E5E7EB; /* Светлый текст */
+            --text-light: #9CA3AF; /* Светло-серый текст */
+            --bg: #0A0E14; /* Почти чёрный с синевой */
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            --shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.8);
+            --radius: 18px;
+            --transition: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            --max-width: 1200px;
+            --logo-blue: #C6A96C; /* Золотой для логотипа в прелоадере */
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ===== Тёмный фон и эффекты ===== */
+        body {
+            position: relative;
+            background: radial-gradient(ellipse at 30% 20%, #1A1F2B 0%, #0A0E14 70%);
+            min-height: 100vh;
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Золотое свечение с дыханием (упрощено для производительности) */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle at center, rgba(198,169,108,0.10) 0%, transparent 70%);
+            animation: breathe 12s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+            will-change: opacity; /* Подсказка браузеру для оптимизации */
+        }
+
+        /* Лёгкая зернистость (заменён тяжёлый SVG-шум на CSS-паттерн) */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.02) 1px, transparent 1px),
+                radial-gradient(circle at 90% 80%, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px, 30px 30px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes breathe {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* ===== Глобальные стили ===== */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+        }
+
+        /* ===== PRELOADER ===== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+            background: #0A0E14;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: none;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader__content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: fadeInUp 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .preloader__logo img {
+            width: min(200px, 80vw);
+            height: auto;
+            display: block;
+            object-fit: contain;
+            animation: floatLogo 3s ease-in-out infinite 2.2s; 
+        }
+
+        .preloader__text {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            animation: floatText 3s ease-in-out infinite 2.4s;
+        }
+
+        .preloader__subtext {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            margin-top: -2px;
+            animation: floatText 3s ease-in-out infinite 2.6s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes floatText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('/Media/1.jpg') center/cover no-repeat;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding: 2rem 1.5rem;
+        }
+
+        .hero__content {
+            max-width: 780px;
+        }
+
+        .hero__title {
+            font-size: clamp(2.4rem, 5vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.4rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero__subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            margin-bottom: 2.8rem;
+            opacity: 0.9;
+            font-weight: 400;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--text-light);
+        }
+
+        /* ===== SECTIONS COMMON ===== */
+        .section {
+            padding: 5rem 0;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid rgba(198, 169, 108, 0.06);
+            border-bottom: 1px solid rgba(198, 169, 108, 0.06);
+            background: transparent;
+        }
+
+        .section__inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section__title {
+            font-size: clamp(2rem, 3.5vw, 2.3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3.5rem;
+            position: relative;
+            letter-spacing: -0.3px;
+            color: var(--gold);
+        }
+
+        .section__title::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: var(--gold);
+            margin: 0.85rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* ===== REVEAL ANIMATION ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about__photo {
+            flex: 0 0 320px; /* Увеличено с 280px до 320px */
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #1A1F2B;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(198, 169, 108, 0.2);
+        }
+
+        .about__photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Если хотите видеть картинку целиком (без обрезки), замените cover на contain */
+            display: block;
+        }
+
+        .about__text {
+            flex: 1 1 360px;
+        }
+
+        .about__text h3 {
+            font-size: 2.1rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--gold);
+        }
+
+        .about__text p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+        }
+
+        /* ===== PROJECTS SECTION ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1025px) {
+            .projects-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .project-card {
+            background: #121822;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            transition: transform var(--transition), box-shadow var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(198, 169, 108, 0.05);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(198, 169, 108, 0.3);
+        }
+
+        .project-card__img {
+            width: 100%;
+            aspect-ratio: 600 / 400;
+            object-fit: cover;
+            background: #1A1F2B;
+            display: block;
+        }
+
+        /* Скрытые карточки (изначально видны только первые 3) */
+        .project-card.hidden-project {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .project-card.hidden-project.show {
+            display: flex;
+            animation: fadeInUp 0.7s ease forwards;
+        }
+
+        /* Кнопка "Показать еще" */
+        .btn-show-more-wrapper {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .btn-show-more {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--gold);
+            color: #0A0E14;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: 0 10px 25px rgba(198, 169, 108, 0.3);
+        }
+
+        .btn-show-more:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px rgba(198, 169, 108, 0.5);
+            color: #0A0E14;
+        }
+
+        .btn-show-more.hidden {
+            display: none;
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .contact-form {
+            flex: 1 1 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--gold);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.9rem 1.1rem;
+            border: 1px solid rgba(198, 169, 108, 0.15);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            background: #121822;
+            color: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(198, 169, 108, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.95rem 2.4rem;
+            background: var(--gold);
+            color: #0A0E14;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+            align-self: flex-start;
+            box-shadow: 0 10px 25px rgba(198, 169, 108, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px rgba(198, 169, 108, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== Медиа-блок с видео справа ===== */
+        .contact-media {
+            flex: 1 1 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .device-mockup {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 16 / 9;
+            border: 14px solid #1A1F2B;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            background: #000;
+        }
+
+        .device-mockup::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #334155;
+            border-radius: 50%;
+            box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.3);
+            z-index: 10;
+        }
+
+        .device-mockup video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1A1F2B;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            font-weight: 500;
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            position: relative;
+            z-index: 2;
+            background: #06090c;
+            color: #94a3b8;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .footer .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .footer__top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(198, 169, 108, 0.06);
+        }
+
+        .footer__contacts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .footer__contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer__contact-link:hover {
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        .footer__icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(198, 169, 108, 0.08);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .footer__contact-link:hover .footer__icon-wrapper {
+            background: var(--gold);
+            color: #0A0E14;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(198, 169, 108, 0.3);
+        }
+
+        .footer__socials {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer__socials .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(198, 169, 108, 0.08);
+            color: #cbd5e0;
+            transition: all var(--transition);
+        }
+
+        .footer__socials .social-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .footer__socials .social-link:hover {
+            background: var(--gold);
+            color: #0A0E14;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 4px 16px rgba(198, 169, 108, 0.4);
+        }
+
+        .footer__bottom {
+            padding-top: 1.8rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            letter-spacing: 0.3px;
+        }
+
+        .footer__bottom strong {
+            color: var(--gold);
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+        /* ========== МАКСИМАЛЬНАЯ АДАПТИВНОСТЬ ========== */
+        @media (max-width: 1024px) {
+            .hero__title { font-size: 2.8rem; }
+            .hero__subtitle { font-size: 1.15rem; }
+            .about__text h3 { font-size: 1.8rem; }
+            .device-mockup { max-width: 600px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero { min-height: 75vh; padding: 1.5rem; }
+            .hero__title { font-size: 2.2rem; }
+            .hero__subtitle { font-size: 1.05rem; }
+            .section { padding: 3.5rem 0; }
+
+            .about { gap: 2rem; }
+            .about__photo { width: 250px; height: 250px; flex: 0 0 250px; } /* Увеличено с 220px до 250px */
+            .about__text h3 { font-size: 1.6rem; }
+            .about__text p { font-size: 1rem; }
+
+            .projects-grid { gap: 1.5rem; }
+
+            .contact-wrapper { flex-direction: column; gap: 2rem; }
+            .contact-media { flex: 1 1 100%; width: 100%; order: -1; padding: 0; }
+            .device-mockup { max-width: 500px; margin: 0 auto; }
+            .contact-form { flex: 1 1 100%; width: 100%; order: 1; }
+            .btn { align-self: stretch; }
+
+            .footer__top { flex-direction: column; align-items: center; gap: 1.5rem; }
+            .footer__contacts { flex-direction: column; justify-content: center; gap: 0.8rem; }
+            .footer__socials { justify-content: center; }
+            .contact-media { flex: 1 1 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .section { padding: 2.5rem 0; }
+            .section__inner { padding: 0 1rem; }
+            .hero__title { font-size: 1.8rem; }
+            .about__photo { width: 190px; height: 190px; flex: 0 0 190px; } /* Увеличено с 160px до 190px */
+            .about__text h3 { font-size: 1.4rem; }
+            .about__text p { font-size: 0.95rem; }
+            .device-mockup { border-width: 10px; border-radius: 24px; max-width: 350px; }
+            .device-mockup::before { top: 10px; width: 6px; height: 6px; }
+            .footer { padding: 2rem 1rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ПРЕЛОАДЕР ===== -->
+    <div id="preloader">
+        <div class="preloader__content">
+            <div class="preloader__logo">
+                <!-- Убедитесь, что файл лежит в папке Media -->
+                <img src="/Media/logo.png" alt="OMEGA Logo">
+            </div>
+            <div class="preloader__text">OMEGA GROUP</div>
+            <div class="preloader__subtext">Строительство и ремонт под ключ</div>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero__content reveal">
+                <h1 class="hero__title">Создаём пространство вашей мечты</h1>
+                <p class="hero__subtitle">Полный цикл ремонтно-строительных работ в Москве и Московской области. Фиксированная смета, гарантия 5 лет.</p>
+            </div>
+        </section>
+
+        <section class="section" id="about">
+            <div class="section__inner">
+                <h2 class="section__title">О компании</h2>
+                <div class="about">
+                    <div class="about__photo reveal">
+                        <img src="/Media/logo.png" alt="Логотип Omega Group" width="320" height="320">
+                    </div>
+                    <div class="about__text reveal">
+                        <h3>Нам доверяют с 2013 года</h3>
+                        <p>Omega Group — команда профессионалов с опытом реализации более 240 проектов в сфере жилого и коммерческого строительства. Мы полностью сопровождаем объект: от дизайн-проекта до финишной уборки.</p>
+                        <p>Прозрачная смета, поэтапная оплата и персональный менеджер на каждом объекте — наши стандарты работы.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Проекты -->
+        <section class="section" id="projects">
+            <div class="section__inner">
+                <h2 class="section__title">Проекты</h2>
+                <div class="projects-grid">
+                    <article class="project-card reveal">
+                        <img class="project-card__img" src="/Media/1.jpg" alt="Коттедж Forest House" width="600" height="400" loading="lazy">
+                    </article>
+                    <article class="project-card reveal">
+                        <img class="project-card__img" src="/Media/2.jpg" alt="Офис в стиле лофт" width="600" height="400" loading="lazy">
+                    </article>
+                    <article class="project-card reveal">
+                        <img class="project-card__img" src="/Media/3.jpg" alt="Квартира в ЖК Садовые кварталы" width="600" height="400" loading="lazy">
+                    </article>
+
+                    <article class="project-card hidden-project">
+                        <img class="project-card__img" src="/Media/4.png" alt="Реставрация особняка" width="600" height="400" loading="lazy">
+                    </article>
+                    <article class="project-card hidden-project">
+                        <img class="project-card__img" src="/Media/5.jpg" alt="Коттедж Forest House" width="600" height="400" loading="lazy">
+                    </article>
+                    <article class="project-card hidden-project">
+                        <img class="project-card__img" src="/Media/6.jpg" alt="Коттедж Forest House" width="600" height="400" loading="lazy">
+                    </article>
+                </div>
+
+                <div class="btn-show-more-wrapper">
+                    <button class="btn-show-more" id="showMoreBtn">Показать еще</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контакты -->
+        <section class="section" id="contact">
+            <div class="section__inner">
+                <div class="contact-wrapper">
+                    <form class="contact-form reveal" id="contact-form" novalidate>
+                        <div class="form-group">
+                            <label for="name">Имя</label>
+                            <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Сообщение</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Опишите проект или задайте вопрос..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Отправить заявку</button>
+                    </form>
+
+                    <div class="contact-media reveal">
+                        <div class="device-mockup">
+                            <video src="/Media/arabiyavideo.mp4" autoplay loop muted playsinline controls></video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__top">
+                <div class="footer__contacts">
+                    <a href="tel:+74951234567" class="footer__contact-link">
+                        <span class="footer__icon-wrapper">📞</span> +7 (495) 123-45-67
+                    </a>
+                    <a href="https://yandex.ru/maps/?text=Москва,+ул.+Строителей,+15" target="_blank" class="footer__contact-link">
+                        <span class="footer__icon-wrapper">📍</span> Москва, ул. Строителей, 15
+                    </a>
+                    <a href="mailto:info@omega-group.ru" class="footer__contact-link">
+                        <span class="footer__icon-wrapper">✉️</span> info@omega-group.ru
+                    </a>
+                </div>
+
+                <div class="footer__socials">
+                    <a href="#" class="social-link" aria-label="WhatsApp" title="WhatsApp">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Telegram" title="Telegram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.04-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.98-1.73 6.64-2.87 7.98-3.42 3.8-1.58 4.59-1.85 5.1-1.86.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="YouTube" title="YouTube">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="mailto:info@omega-group.ru" class="social-link" aria-label="Email" title="Email">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>&copy; <span id="current-year">2026</span> <strong>Omega Group</strong>. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        (function() {
+            document.body.classList.add('no-scroll');
+
+            const contactForm = document.getElementById('contact-form');
+            const toast = document.getElementById('toast');
+            const yearSpan = document.getElementById('current-year');
+
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+
+            const allAnchorLinks = document.querySelectorAll('a[href^="#"]');
+            allAnchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const message = document.getElementById('message').value.trim();
+                if (!name || !email || !message) {
+                    showToast('Пожалуйста, заполните все поля.', true);
+                    return;
+                }
+                showToast('✅ Заявка отправлена! Мы свяжемся с вами в ближайшее время (демо).');
+                contactForm.reset();
+            });
+
+            let toastTimer;
+            function showToast(text, isError = false) {
+                if (toastTimer) clearTimeout(toastTimer);
+                toast.textContent = text;
+                toast.style.background = isError ? '#1A1F2B' : '#1A1F2B';
+                toast.style.borderColor = isError ? '#EF4444' : '#C6A96C';
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+            }
+
+            const revealElements = document.querySelectorAll('.reveal');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { rootMargin: '0px 0px -60px 0px', threshold: 0.15 });
+
+                revealElements.forEach(el => observer.observe(el));
+            } else {
+                revealElements.forEach(el => el.classList.add('visible'));
+            }
+
+            const preloader = document.getElementById('preloader');
+
+            function hidePreloader() {
+                if (preloader && !preloader.classList.contains('hidden')) {
+                    preloader.classList.add('hidden');
+                    document.body.classList.remove('no-scroll');
+                }
+            }
+
+            if (document.readyState === 'complete') {
+                setTimeout(hidePreloader, 1600);
+            } else {
+                window.addEventListener('load', function() {
+                    setTimeout(hidePreloader, 8000);
+                });
+            }
+
+            setTimeout(function() {
+                if (preloader && !preloader.classList.contains('hidden')) {
+                    hidePreloader();
+                }
+            }, 4000);
+
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            if (showMoreBtn) {
+                showMoreBtn.addEventListener('click', function() {
+                    const hiddenProjects = document.querySelectorAll('.project-card.hidden-project');
+                    hiddenProjects.forEach(function(card, index) {
+                        setTimeout(function() {
+                            card.classList.add('show');
+                        }, index * 200);
+                    });
+                    showMoreBtn.classList.add('hidden');
+                });
+            }
+
+        })();
+    </script>
+</body>
+</html>
