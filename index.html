@@ -566,7 +566,12 @@
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
-            font-size: 1rem;
+        }
+
+        .footer__icon-wrapper svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
 
         .footer__contact-link:hover .footer__icon-wrapper {
@@ -617,7 +622,7 @@
             overflow: hidden;
         }
 
-        /* ========== МАКСИМАЛЬНАЯ АДАПТИВНОСТЬ ========== */
+        /* ========== ИСХОДНЫЕ МЕДИА-ЗАПРОСЫ ========== */
         @media (max-width: 1024px) {
             .hero__title { font-size: 2.8rem; }
             .hero__subtitle { font-size: 1.15rem; }
@@ -659,6 +664,62 @@
             .about__text p { font-size: 0.95rem; }
             .device-mockup { border-width: 10px; border-radius: 24px; max-width: 350px; }
             .footer { padding: 2rem 1rem 1.5rem; }
+        }
+
+        /* ========== ДОБАВЛЕННЫЕ МЕДИА-ЗАПРОСЫ ДЛЯ ПОЛНОЙ АДАПТИВНОСТИ ========== */
+
+        /* Очень маленькие экраны (до 380px) */
+        @media (max-width: 380px) {
+            .hero__title { font-size: 1.6rem; }
+            .hero__subtitle { font-size: 0.9rem; }
+            .hero { padding: 1rem 1rem; min-height: 60vh; }
+            .about__photo { width: 150px; height: 150px; flex: 0 0 150px; }
+            .about__text h3 { font-size: 1.3rem; }
+            .about__text p { font-size: 0.9rem; }
+            .section { padding: 2rem 0; }
+            .section__inner { padding: 0 0.8rem; }
+            .btn-show-more { padding: 0.7rem 1.8rem; font-size: 0.9rem; }
+            .btn { padding: 0.7rem 1.8rem; font-size: 0.9rem; align-self: stretch; }
+            .footer__contact-link { font-size: 0.85rem; gap: 6px; }
+            .footer__icon-wrapper { width: 30px; height: 30px; }
+            .footer__icon-wrapper svg { width: 16px; height: 16px; }
+            .footer__socials .social-link { width: 36px; height: 36px; }
+            .footer__socials .social-link svg { width: 16px; height: 16px; }
+            .footer { padding: 1.5rem 0.8rem 1rem; }
+            .device-mockup { max-width: 280px; border-width: 6px; border-radius: 16px; }
+        }
+
+        /* Между 381px и 480px */
+        @media (min-width: 381px) and (max-width: 480px) {
+            .hero__title { font-size: 2rem; }
+            .hero__subtitle { font-size: 1rem; }
+            .about__photo { width: 170px; height: 170px; flex: 0 0 170px; }
+            .about__text h3 { font-size: 1.5rem; }
+            .about__text p { font-size: 0.95rem; }
+            .device-mockup { max-width: 320px; border-width: 8px; }
+            .footer { padding: 1.8rem 1rem 1.2rem; }
+        }
+
+        /* Планшеты (от 481px до 767px) */
+        @media (min-width: 481px) and (max-width: 767px) {
+            .hero__title { font-size: 2.5rem; }
+            .hero__subtitle { font-size: 1.1rem; }
+            .about__photo { width: 220px; height: 220px; flex: 0 0 220px; }
+            .about__text h3 { font-size: 1.8rem; }
+            .about__text p { font-size: 1rem; }
+            .device-mockup { max-width: 420px; }
+            .footer { padding: 2.5rem 1.5rem 1.5rem; }
+        }
+
+        /* Большие экраны (≥ 1367px) */
+        @media (min-width: 1367px) {
+            :root {
+                --max-width: 1400px; /* чуть шире для больших мониторов */
+            }
+            .hero__title { font-size: 3.5rem; }
+            .hero__subtitle { font-size: 1.4rem; }
+            .section { padding: 6rem 0; }
+            .footer { padding: 4rem 2rem 2rem; }
         }
     </style>
 </head>
@@ -767,13 +828,20 @@
             <div class="footer__top">
                 <div class="footer__contacts">
                     <a href="tel:+74951234567" class="footer__contact-link">
-                        <span class="footer__icon-wrapper">📞</span> +7 (495) 123-45-67
+                        <span class="footer__icon-wrapper">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                        </span>
+                        +7 (495) 123-45-67
                     </a>
                     <a href="https://yandex.ru/maps/?text=Москва,+ул.+Строителей,+15" target="_blank" class="footer__contact-link">
-                        <span class="footer__icon-wrapper">📍</span> Москва, ул. Строителей, 15
-                    </a>
-                    <a href="mailto:info@omega-group.ru" class="footer__contact-link">
-                        <span class="footer__icon-wrapper">✉️</span> info@omega-group.ru
+                        <span class="footer__icon-wrapper">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </span>
+                        Москва, ул. Строителей, 15
                     </a>
                 </div>
 
